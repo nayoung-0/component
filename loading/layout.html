@@ -1,0 +1,75 @@
+<script>
+    document.documentElement.classList.add('is-page-loading');
+</script>
+<style>
+    html.is-page-loading #wrap {opacity: 0;}
+    #wrap {opacity: 1;transition: opacity 0.2s ease;}
+    html.is-page-loaded #wrap {opacity: 1;}
+
+    @media (prefers-reduced-motion: reduce) {
+        #wrap {transition: none;}
+    }
+    #xans_myshop_basket_cnt.is-ready {opacity: 1;}
+    @media (prefers-reduced-motion: reduce) {
+        #xans_myshop_basket_cnt {transition: none;}
+    }
+</style>
+
+<script>
+    (function () {
+        var fallbackTimer = window.setTimeout(showPage, 2000);
+
+        function showPage() {
+            window.clearTimeout(fallbackTimer);
+
+            document.documentElement.classList.remove('is-page-loading');
+            document.documentElement.classList.add('is-page-loaded');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', showPage, {
+                once: true
+            });
+        } else {
+            showPage();
+        }
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                showPage();
+            }
+        });
+    }());
+</script>
+<script>
+    (function () {
+        function init() {
+            var el = document.getElementById('xans_myshop_basket_cnt');
+            if (!el) return;
+
+            var fallback = window.setTimeout(reveal, 1500);
+
+            function reveal() {
+                window.clearTimeout(fallback);
+                var count = parseInt(el.textContent.trim(), 10) || 0;
+                if (count > 0) {
+                    el.classList.add('is-ready');
+                }
+            }
+
+            new MutationObserver(reveal).observe(el, {
+                childList: true,
+                characterData: true,
+                subtree: true
+            });
+
+            reveal();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init, { once: true });
+        } else {
+            init();
+        }
+    })();
+</script>

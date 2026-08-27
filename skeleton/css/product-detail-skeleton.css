@@ -1,0 +1,100 @@
+/**************************************************
+    상품상세 스켈레톤 UI (공용 컴포넌트)
+    - 모바일 상품상세 첫 화면 로딩 시 노출되는 스켈레톤
+    - 대응 마크업: html/product-detail-skeleton.snippet.html
+    - 대응 JS: js/product-detail.custom.js > initDetailSkeleton()
+
+    [사용 전 확인]
+    - 스켈레톤이 감싸는 실제 콘텐츠 루트와 스켈레톤 요소가
+      "같은 부모의 형제(sibling)" 관계여야 아래 opacity 규칙이 먹는다.
+      마크업 구조가 다르면 `.product-detail-skeleton ~ *` 선택자를
+      실제 콘텐츠 래퍼 클래스로 바꿔서 사용할 것.
+**************************************************/
+
+.product-detail-skeleton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    pointer-events: none;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0.2s ease 0.2s;
+}
+.product-detail-skeleton.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.product-detail-skeleton__image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 37%, #f0f0f0 63%);
+    background-size: 400% 100%;
+    animation: product-detail-skeleton-shimmer 1.4s ease infinite;
+}
+.product-detail-skeleton__info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+    padding: 16px 16px 60px;
+}
+.product-detail-skeleton__line {
+    height: 14px;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 37%, #f0f0f0 63%);
+    background-size: 400% 100%;
+    animation: product-detail-skeleton-shimmer 1.4s ease infinite;
+}
+.product-detail-skeleton__line--tag { width: 30%; height: 12px; }
+.product-detail-skeleton__line--name { width: 70%; height: 18px; }
+.product-detail-skeleton__line--name-short { width: 45%; }
+.product-detail-skeleton__line--price { width: 40%; height: 22px; margin-top: 4px; }
+.product-detail-skeleton__line--benefit { width: 90%; height: 40px; border-radius: 16px; }
+
+@keyframes product-detail-skeleton-shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .product-detail-skeleton,
+    .product-detail-skeleton.is-hidden {
+        transition: none;
+    }
+    .product-detail-skeleton__image,
+    .product-detail-skeleton__line {
+        animation: none;
+    }
+}
+
+/* layout.html 전역 #wrap 로딩(opacity) 페이드와 중복 적용 방지 */
+html.has-detail-skeleton.is-page-loading #wrap {
+    opacity: 1 !important;
+}
+
+/**************************************************
+    스켈레톤 노출 중 실제 콘텐츠 가림 처리 (추가분)
+    - JS가 스켈레톤 숨김 시 .is-hidden 클래스를 붙여준다는 전제
+    - .product-detail-skeleton과 같은 부모의 형제 요소 전부를
+      스켈레톤이 사라지기 전까지 opacity 0 + 클릭 차단 처리
+**************************************************/
+.product-detail-skeleton:not(.is-hidden) ~ * {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.product-detail-skeleton.is-hidden ~ * {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .product-detail-skeleton.is-hidden ~ * {
+        transition: none;
+    }
+}
