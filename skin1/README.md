@@ -47,6 +47,8 @@ FAQ 아코디언의 DOM 의존성 및 적용 방법은 별도 노션 문서를 �
 # 2. CSS
 
 ## 2-1. Font Family
+    <!-- pretendard -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 폰트 적용 시 아래 파일의 기존 `font-family` 선언을 확인합니다.
 - `/_aisoul/css/reset.css`
 - `/layout/basic/css/layout.css`
@@ -65,6 +67,8 @@ FAQ 아코디언의 DOM 의존성 및 적용 방법은 별도 노션 문서를 �
 - `/layout/basic/css/ec-base-ui.css`
 form, checkbox, path, field, radio, quantity, step 등의
 공통 UI 스타일을 관리합니다.
+
+자세한 경로는 노션 Component
 
 
 # 3. JS
